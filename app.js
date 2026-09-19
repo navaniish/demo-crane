@@ -446,7 +446,9 @@
         <td class="text-right"><strong>${formatINR(inv.grandTotal)}</strong></td>
         <td><span class="status-badge ${inv.status.toLowerCase().replace(' ', '')}"><span class="status-dot"></span>${inv.status}</span></td>
         <td class="text-center">
-          <button class="btn btn-sm btn-outline btn-view-inv" data-id="${inv.id}">View / Print</button>
+          <div class="action-btn-group">
+            <button class="btn btn-sm btn-outline btn-view-inv" data-id="${inv.id}">View / Print</button>
+          </div>
         </td>
       `;
       tbody.appendChild(tr);
@@ -551,8 +553,10 @@
         <td><code>${cust.gstin || 'N/A'}</code></td>
         <td>${cust.state}</td>
         <td class="text-center">
-          <button class="btn btn-sm btn-outline btn-edit-cust" data-id="${cust.id}">Edit</button>
-          <button class="btn btn-sm btn-outline text-danger btn-delete-cust" data-id="${cust.id}">✕</button>
+          <div class="action-btn-group">
+            <button class="btn btn-sm btn-outline btn-edit-cust" data-id="${cust.id}">Edit</button>
+            <button class="btn btn-sm btn-outline text-danger btn-delete-cust" data-id="${cust.id}">✕</button>
+          </div>
         </td>
       `;
       tbody.appendChild(tr);
@@ -629,9 +633,11 @@
         <td class="text-right"><strong>${formatINR(inv.grandTotal)}</strong></td>
         <td><span class="status-badge ${inv.status.toLowerCase().replace(' ', '')}"><span class="status-dot"></span>${inv.status}</span></td>
         <td class="text-center">
-          <button class="btn btn-sm btn-primary btn-view-inv" data-id="${inv.id}">View / Print</button>
-          ${inv.status !== 'Paid' ? `<button class="btn btn-sm btn-outline btn-pay-inv" data-id="${inv.id}">+ Pay</button>` : ''}
-          <button class="btn btn-sm btn-outline text-danger btn-delete-inv" data-id="${inv.id}">✕</button>
+          <div class="action-btn-group">
+            <button class="btn btn-sm btn-primary btn-view-inv" data-id="${inv.id}">View / Print</button>
+            ${inv.status !== 'Paid' ? `<button class="btn btn-sm btn-outline btn-pay-inv" data-id="${inv.id}">+ Pay</button>` : ''}
+            <button class="btn btn-sm btn-outline text-danger btn-delete-inv" data-id="${inv.id}">✕</button>
+          </div>
         </td>
       `;
       tbody.appendChild(tr);
@@ -707,9 +713,11 @@
         <td class="text-right"><strong>${formatINR(op.totalSalary)}</strong></td>
         <td><span class="status-badge ${op.status.toLowerCase()}"><span class="status-dot"></span>${op.status}</span></td>
         <td class="text-center">
-          ${op.status !== 'Paid' ? `<button class="btn btn-sm btn-primary btn-pay-op" data-id="${op.id}">Pay Salary</button>` : '<span class="text-success" style="font-weight:600;">✓ Settled</span>'}
-          <button class="btn btn-sm btn-outline btn-edit-op" data-id="${op.id}">Edit</button>
-          <button class="btn btn-sm btn-outline text-danger btn-delete-op" data-id="${op.id}">✕</button>
+          <div class="action-btn-group">
+            ${op.status !== 'Paid' ? `<button class="btn btn-sm btn-primary btn-pay-op" data-id="${op.id}">Pay Salary</button>` : '<span class="text-success" style="font-weight:600;">✓ Settled</span>'}
+            <button class="btn btn-sm btn-outline btn-edit-op" data-id="${op.id}">Edit</button>
+            <button class="btn btn-sm btn-outline text-danger btn-delete-op" data-id="${op.id}">✕</button>
+          </div>
         </td>
       `;
       tbody.appendChild(tr);
@@ -758,7 +766,9 @@
         <td><span class="status-badge ${inv.status.toLowerCase().replace(' ', '')}"><span class="status-dot"></span>${inv.status}</span></td>
         <td>${inv.paymentMethod || 'Pending'}</td>
         <td class="text-center">
-          ${inv.status !== 'Paid' ? `<button class="btn btn-sm btn-primary btn-record-pay-now" data-id="${inv.id}">Record Payment</button>` : '<span class="text-success" style="font-weight:600;">✓ Settled</span>'}
+          <div class="action-btn-group">
+            ${inv.status !== 'Paid' ? `<button class="btn btn-sm btn-primary btn-record-pay-now" data-id="${inv.id}">Record Payment</button>` : '<span class="text-success" style="font-weight:600;">✓ Settled</span>'}
+          </div>
         </td>
       `;
       tbody.appendChild(tr);
