@@ -450,6 +450,13 @@
   function applyLanguage(langKey) {
     const lang = translations[langKey] || translations.en;
 
+    // Keep language select dropdowns synced
+    const quickSelect = document.getElementById('quick-lang-select');
+    if (quickSelect && quickSelect.value !== langKey) quickSelect.value = langKey;
+
+    const setLangSelect = document.getElementById('set-app-language');
+    if (setLangSelect && setLangSelect.value !== langKey) setLangSelect.value = langKey;
+
     const sidebarMap = {
       'dashboard': lang.navDashboard,
       'cranes': lang.navCranes,
@@ -460,6 +467,14 @@
       'documents': lang.navDocuments,
       'settings': lang.navSettings
     };
+
+    // Update active page header title
+    const currentActiveSec = document.querySelector('.view-section.active');
+    if (currentActiveSec) {
+      const activeView = currentActiveSec.id.replace('view-', '');
+      const headerTitleEl = document.getElementById('page-title');
+      if (headerTitleEl) headerTitleEl.textContent = sidebarMap[activeView] || lang.navDashboard;
+    }
 
     document.querySelectorAll('#sidebar .nav-item').forEach(item => {
       const view = item.getAttribute('data-view');
@@ -2009,22 +2024,35 @@
       showToast('Invoice Defaults Saved!');
     });
 
-    document.getElementById('language-settings-form')?.addEventListener('submit', (e) => {
-      e.preventDefault();
+    function switchLanguageInstantly(chosenLang) {
+      if (!chosenLang) return;
       appState.settings = appState.settings || {};
-      const chosenLang = document.getElementById('set-app-language')?.value || 'en';
       appState.settings.language = chosenLang;
       saveState();
 
       const langNames = {
-        'en': 'English',
-        'gu': 'ગુજરાતી (Gujarati)',
-        'hi': 'हिन्दी (Hindi)',
-        'te': 'తెలుగు (Telugu)',
-        'mr': 'मराठी (Marathi)'
+        'en': 'English 🇬🇧',
+        'gu': 'ગુજરાતી 🇮🇳',
+        'hi': 'हिन्दी 🇮🇳',
+        'te': 'తెలుగు 🇮🇳',
+        'mr': 'मराठी 🇮🇳'
       };
 
-      showToast(`Language preference set to ${langNames[chosenLang] || chosenLang}`);
+      showToast(`Language switched to ${langNames[chosenLang] || chosenLang}`);
+    }
+
+    document.getElementById('quick-lang-select')?.addEventListener('change', (e) => {
+      switchLanguageInstantly(e.target.value);
+    });
+
+    document.getElementById('set-app-language')?.addEventListener('change', (e) => {
+      switchLanguageInstantly(e.target.value);
+    });
+
+    document.getElementById('language-settings-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const chosenLang = document.getElementById('set-app-language')?.value || 'en';
+      switchLanguageInstantly(chosenLang);
     });
 
     // Auth & Session Listeners
