@@ -1727,6 +1727,7 @@
         'en': 'English',
         'gu': 'ગુજરાતી (Gujarati)',
         'hi': 'हिन्दी (Hindi)',
+        'te': 'తెలుగు (Telugu)',
         'mr': 'मराठी (Marathi)'
       };
 
