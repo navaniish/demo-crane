@@ -11,7 +11,7 @@
   // Default Demo Initial State
   const defaultState = {
     cranes: [
-      { id: 'CR-001', code: 'CR-001', type: 'Mobile Crane', capacity: '25 Ton', reg: 'GJ-01-AB-1234', model: 'ACE 250', year: 2022, hourly: 1500, daily: 15000, status: 'Available' },
+      { id: 'CR-001', code: 'CR-001', type: 'Farana Crane', capacity: '15 Ton', reg: 'GJ-01-AB-1234', model: 'ACE FX150 Farana', year: 2022, hourly: 1200, daily: 12000, status: 'Available' },
       { id: 'CR-002', code: 'CR-002', type: 'Mobile Crane', capacity: '40 Ton', reg: 'GJ-06-XX-5678', model: 'Escorts 40T', year: 2023, hourly: 2200, daily: 22000, status: 'Working' },
       { id: 'CR-003', code: 'CR-003', type: 'Crawler Crane', capacity: '60 Ton', reg: 'GJ-12-BB-9900', model: 'Kobelco CKE600', year: 2021, hourly: 3500, daily: 35000, status: 'Available' },
       { id: 'CR-004', code: 'CR-004', type: 'Hydraulic Crane', capacity: '30 Ton', reg: 'GJ-03-CC-4321', model: 'Sany STC300', year: 2024, hourly: 1800, daily: 18000, status: 'Maintenance' }
