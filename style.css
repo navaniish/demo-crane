@@ -1349,21 +1349,22 @@ textarea.input-control {
   }
 }
 
-/* Mobile Bottom Navigation */
+/* Mobile Floating Bottom Dock Navigation */
 .mobile-bottom-nav {
   display: none;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(64px + env(safe-area-inset-bottom, 0px));
-  padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)) 12px;
+  bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  left: 12px;
+  right: 12px;
+  height: 64px;
+  padding: 4px 6px;
   background: rgba(15, 23, 42, 0.94);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.35);
-  z-index: 150;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45), 0 0 25px rgba(245, 183, 0, 0.12);
+  z-index: 200;
   justify-content: space-around;
   align-items: center;
 }
@@ -1383,11 +1384,12 @@ textarea.input-control {
   font-size: 0.68rem;
   font-weight: 600;
   text-decoration: none;
-  padding: 6px 4px;
-  border-radius: 12px;
+  padding: 6px 2px;
+  border-radius: 14px;
   transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
 }
 
 .mobile-nav-item svg {
@@ -1404,13 +1406,24 @@ textarea.input-control {
 
 .mobile-nav-item.active {
   color: var(--color-yellow);
-  background: rgba(245, 183, 0, 0.14);
-  font-weight: 700;
-  box-shadow: inset 0 0 0 1px rgba(245, 183, 0, 0.25);
+  background: rgba(245, 183, 0, 0.16);
+  font-weight: 800;
+  box-shadow: inset 0 0 0 1px rgba(245, 183, 0, 0.3);
+}
+
+.mobile-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  width: 14px;
+  height: 3px;
+  background-color: var(--color-yellow);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(245, 183, 0, 0.8);
 }
 
 .mobile-nav-item.active svg {
-  transform: translateY(-1px) scale(1.1);
+  transform: translateY(1px) scale(1.12);
   stroke: var(--color-yellow);
 }
 
