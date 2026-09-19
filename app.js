@@ -265,6 +265,299 @@
     renderAllViews();
   }
 
+  // --- MULTILINGUAL i18n TRANSLATIONS DICTIONARY ---
+  const translations = {
+    en: {
+      navDashboard: "Dashboard",
+      navCranes: "Cranes",
+      navCustomers: "Customers",
+      navInvoices: "GST Invoices",
+      navOperators: "Operator Salaries",
+      navPayments: "Payments",
+      navDocuments: "Document Vault",
+      navSettings: "Settings",
+      home: "Home",
+      more: "More",
+      goodMorning: "Good Morning",
+      totalCranes: "Total Cranes",
+      activeCranes: "Active Cranes",
+      monthRevenue: "Month Revenue",
+      pendingPayments: "Pending Collections",
+      recentInvoices: "Recent Invoices",
+      viewAll: "View All",
+      addCrane: "+ Add Crane",
+      addCustomer: "+ Add Customer",
+      createInvoice: "+ Create Invoice",
+      exportGstr1: "Export GSTR-1 Report",
+      uploadDocument: "+ Upload Document",
+      paySalary: "+ Add Staff / Pay",
+      recordPayment: "Record Payment",
+      craneTitle: "Crane Fleet Management",
+      customerTitle: "Customer Directory",
+      invoiceTitle: "GST Invoices & Tax Breakdown",
+      operatorTitle: "Operator Payroll & Salaries",
+      paymentTitle: "Payment Tracker & Collections",
+      documentTitle: "Document Vault & Compliance",
+      settingsTitle: "Settings & Company Profile",
+      logout: "Logout",
+      loginTitle: "APEX CRANE SERVICES",
+      loginSub: "FLEET ERP & GST BILLING PORTAL"
+    },
+    gu: {
+      navDashboard: "ડેશબોર્ડ",
+      navCranes: "ક્રેન ફ્લીટ",
+      navCustomers: "ગ્રાહકો",
+      navInvoices: "GST ઇન્વોઇસ",
+      navOperators: "ઓપરેટર પગાર",
+      navPayments: "પેમેન્ટ ટ્રેકર",
+      navDocuments: "ડોક્યુમેન્ટ વોલ્ટ",
+      navSettings: "સેટિંગ્સ",
+      home: "હોમ",
+      more: "વધુ",
+      goodMorning: "સુપ્રભાત",
+      totalCranes: "કુલ ક્રેન",
+      activeCranes: "એક્ટિવ ક્રેન",
+      monthRevenue: "ચાલુ માસની આવક",
+      pendingPayments: "બાકી પેમેન્ટ",
+      recentInvoices: "તાજેતરના બિલ",
+      viewAll: "બધા જુઓ",
+      addCrane: "+ નવી ક્રેન ઉમેરો",
+      addCustomer: "+ નવો ગ્રાહક ઉમેરો",
+      createInvoice: "+ નવું બિલ બનાવો",
+      exportGstr1: "GSTR-1 રિપોર્ટ ડાઉનલોડ",
+      uploadDocument: "+ દસ્તાવેજ અપલોડ",
+      paySalary: "+ સ્ટાફ / પગાર ઉમેરો",
+      recordPayment: "પેમેન્ટ નોંધો",
+      craneTitle: "ક્રેન ફ્લીટ મેનેજમેન્ટ",
+      customerTitle: "ગ્રાહક ડિરેક્ટરી",
+      invoiceTitle: "GST ઇન્વોઇસ અને ટેક્સ ગણતરી",
+      operatorTitle: "ઓપરેટર પગાર અને પેરોલ",
+      paymentTitle: "પેમેન્ટ ટ્રેકિંગ અને કલેક્શન",
+      documentTitle: "ડોક્યુમેન્ટ વોલ્ટ અને ફિટનેસ",
+      settingsTitle: "સેટિંગ્સ અને કંપની પ્રોફાઇલ",
+      logout: "લૉગ આઉટ",
+      loginTitle: "એપેક્સ ક્રેન સર્વિસીસ",
+      loginSub: "ફ્લીટ ERP અને GST બિલિંગ પોર્ટલ"
+    },
+    hi: {
+      navDashboard: "डैशबोर्ड",
+      navCranes: "क्रेन बेड़ा",
+      navCustomers: "ग्राहक सूची",
+      navInvoices: "GST चालान (बिल)",
+      navOperators: "ऑपरेटर वेतन",
+      navPayments: "भुगतान ट्रैकर",
+      navDocuments: "दस्तावेज़ वॉल्ट",
+      navSettings: "सेटिंग्स",
+      home: "होम",
+      more: "अधिक",
+      goodMorning: "शुभ प्रभात",
+      totalCranes: "कुल क्रेन",
+      activeCranes: "सक्रिय क्रेन",
+      monthRevenue: "मासिक राजस्व",
+      pendingPayments: "बकाया भुगतान",
+      recentInvoices: "हाल के बिल",
+      viewAll: "सभी देखें",
+      addCrane: "+ नई क्रेन जोड़ें",
+      addCustomer: "+ नया ग्राहक जोड़ें",
+      createInvoice: "+ नया बिल बनाएं",
+      exportGstr1: "GSTR-1 रिपोर्ट निर्यात",
+      uploadDocument: "+ दस्तावेज़ अपलोड",
+      paySalary: "+ स्टाफ / वेतन जोड़ें",
+      recordPayment: "भुगतान दर्ज करें",
+      craneTitle: "क्रेन बेड़ा प्रबंधन",
+      customerTitle: "ग्राहक निर्देशिका",
+      invoiceTitle: "GST चालान एवं कर विवरण",
+      operatorTitle: "ऑपरेटर वेतन एवं पेरोल",
+      paymentTitle: "भुगतान ट्रैकिंग एवं संग्रह",
+      documentTitle: "दस्तावेज़ वॉल्ट एवं अनुपालन",
+      settingsTitle: "सेटिंग्स एवं कंपनी प्रोफ़ाइल",
+      logout: "लॉग आउट",
+      loginTitle: "एपेक्स क्रेन सर्विसेज",
+      loginSub: "बेड़ा ERP एवं GST बिलिंग पोर्टल"
+    },
+    te: {
+      navDashboard: "డాష్‌బోర్డ్",
+      navCranes: "క్రేన్ ఫ్లీట్",
+      navCustomers: "కస్టమర్లు",
+      navInvoices: "GST ఇన్‌వాయిస్‌లు",
+      navOperators: "ఆపరేటర్ జీతాలు",
+      navPayments: "చెల్లింపులు",
+      navDocuments: "డాక్యుమెంట్ వాల్ట్",
+      navSettings: "సెట్టింగ్‌లు",
+      home: "హోమ్",
+      more: "మరిన్ని",
+      goodMorning: "శుభోదయం",
+      totalCranes: "మొత్తం క్రేన్లు",
+      activeCranes: "యాక్టివ్ క్రేన్లు",
+      monthRevenue: "ఈ నెల ఆదాయం",
+      pendingPayments: "బాకీ ఉన్న చెల్లింపులు",
+      recentInvoices: "ఇటీవలి ఇన్‌వాయిస్‌లు",
+      viewAll: "అన్నీ చూడండి",
+      addCrane: "+ కొత్త క్రేన్ జోడించు",
+      addCustomer: "+ కొత్త కస్టమర్ జోడించు",
+      createInvoice: "+ ఇన్‌వాయిస్ సృష్టించు",
+      exportGstr1: "GSTR-1 నివేదిక డౌన్‌లోడ్",
+      uploadDocument: "+ డాక్యుమెంట్ అప్‌లోడ్",
+      paySalary: "+ జీతం చెల్లించు",
+      recordPayment: "చెల్లింపు నమోదు చేయి",
+      craneTitle: "క్రేన్ ఫ్లీట్ మేనేజ్‌మెంట్",
+      customerTitle: "కస్టమర్ వివరాలు",
+      invoiceTitle: "GST ఇన్‌వాయిస్‌లు & పన్ను లెక్కింపు",
+      operatorTitle: "ఆపరేటర్ జీతాలు & పేరోల్",
+      paymentTitle: "చెల్లింపుల ట్రాకింగ్",
+      documentTitle: "డాక్యుమెంట్ వాల్ట్ & ఫిట్‌నెస్",
+      settingsTitle: "సెట్టింగ్‌లు & కంపెనీ ప్రొఫైల్",
+      logout: "లాగ్ అవుట్",
+      loginTitle: "అపెక్స్ క్రేన్ సర్వీసెస్",
+      loginSub: "ఫ్లీట్ ERP & GST బిల్లింగ్ పోర్టల్"
+    },
+    mr: {
+      navDashboard: "डॅशबोर्ड",
+      navCranes: "क्रेन ताफा",
+      navCustomers: "ग्राहक सूची",
+      navInvoices: "GST बिले (इनव्हॉईस)",
+      navOperators: "ऑपरेटर पगार",
+      navPayments: "पेमेंट ट्रॅकर",
+      navDocuments: "दस्तऐवज वॉल्ट",
+      navSettings: "सेटिंग्ज",
+      home: "होम",
+      more: "अधिक",
+      goodMorning: "शुभ प्रभात",
+      totalCranes: "एकूण क्रेन",
+      activeCranes: "कार्यरत क्रेन",
+      monthRevenue: "मासिक महसूल",
+      pendingPayments: "थकित पेमेंट",
+      recentInvoices: "नुकतीच झालेली बिले",
+      viewAll: "सर्व पहा",
+      addCrane: "+ नवीन क्रेन जोडा",
+      addCustomer: "+ नवीन ग्राहक जोडा",
+      createInvoice: "+ नवीन बिल तयार करा",
+      exportGstr1: "GSTR-1 रिपोर्ट डाऊनलोड",
+      uploadDocument: "+ कागदपत्र अपलोड करा",
+      paySalary: "+ पगार जमा करा",
+      recordPayment: "पेमेंट नोंदवा",
+      craneTitle: "क्रेन ताफा व्यवस्थापन",
+      customerTitle: "ग्राहक निर्देशिका",
+      invoiceTitle: "GST बिले आणि कर तपशील",
+      operatorTitle: "ऑपरेटर पगार आणि पेरोल",
+      paymentTitle: "पेमेंट ट्रॅकिंग आणि संकलन",
+      documentTitle: "कागदपत्र वॉल्ट आणि तंदुरुस्ती",
+      settingsTitle: "सेटिंग्ज आणि कंपनी प्रोफाइल",
+      logout: "लॉग आउट",
+      loginTitle: "अ‍ॅपेक्स क्रेन सर्व्हिसेस",
+      loginSub: "ताफा ERP आणि GST बिलिंग पोर्टल"
+    }
+  };
+
+  function applyLanguage(langKey) {
+    const lang = translations[langKey] || translations.en;
+
+    const sidebarMap = {
+      'dashboard': lang.navDashboard,
+      'cranes': lang.navCranes,
+      'customers': lang.navCustomers,
+      'invoices': lang.navInvoices,
+      'operators': lang.navOperators,
+      'payments': lang.navPayments,
+      'documents': lang.navDocuments,
+      'settings': lang.navSettings
+    };
+
+    document.querySelectorAll('#sidebar .nav-item').forEach(item => {
+      const view = item.getAttribute('data-view');
+      const span = item.querySelector('span:not(.badge)');
+      if (view && sidebarMap[view] && span) {
+        span.textContent = sidebarMap[view];
+      }
+    });
+
+    document.querySelectorAll('.mobile-bottom-nav .mobile-nav-item').forEach(item => {
+      const view = item.getAttribute('data-view');
+      const span = item.querySelector('span');
+      if (view && sidebarMap[view] && span) {
+        span.textContent = sidebarMap[view];
+      } else if (item.id === 'mobile-more-trigger' && span) {
+        span.textContent = lang.more;
+      }
+    });
+
+    const titleMap = {
+      'view-cranes': lang.craneTitle,
+      'view-customers': lang.customerTitle,
+      'view-invoices': lang.invoiceTitle,
+      'view-operators': lang.operatorTitle,
+      'view-payments': lang.paymentTitle,
+      'view-documents': lang.documentTitle,
+      'view-settings': lang.settingsTitle
+    };
+
+    Object.keys(titleMap).forEach(viewId => {
+      const titleEl = document.querySelector(`#${viewId} .view-header h2`);
+      if (titleEl) titleEl.textContent = titleMap[viewId];
+    });
+
+    const metricLabels = document.querySelectorAll('.metric-label');
+    if (metricLabels.length >= 4) {
+      metricLabels[0].textContent = lang.totalCranes;
+      metricLabels[1].textContent = lang.activeCranes;
+      metricLabels[2].textContent = lang.monthRevenue;
+      metricLabels[3].textContent = lang.pendingPayments;
+    }
+
+    const greetingSub = document.querySelector('.greeting-sub');
+    if (greetingSub) greetingSub.textContent = lang.goodMorning;
+
+    const recentInvTitle = document.querySelector('.card-header h3');
+    if (recentInvTitle && recentInvTitle.textContent.includes('Invoices')) recentInvTitle.textContent = lang.recentInvoices;
+
+    const linkAllInv = document.getElementById('link-all-invoices');
+    if (linkAllInv) {
+      const span = linkAllInv.querySelector('span');
+      if (span) span.textContent = lang.viewAll;
+    }
+
+    const btnAddCrane = document.getElementById('btn-open-add-crane-modal');
+    if (btnAddCrane) {
+      const span = btnAddCrane.querySelector('span');
+      if (span) span.textContent = lang.addCrane;
+    }
+
+    const btnAddCust = document.getElementById('btn-open-add-customer-modal');
+    if (btnAddCust) {
+      const span = btnAddCust.querySelector('span');
+      if (span) span.textContent = lang.addCustomer;
+    }
+
+    const btnCreateInv = document.getElementById('btn-open-create-invoice-modal');
+    if (btnCreateInv) {
+      const span = btnCreateInv.querySelector('span');
+      if (span) span.textContent = lang.createInvoice;
+    }
+
+    const btnExportGstr = document.getElementById('btn-export-gst-report');
+    if (btnExportGstr) {
+      const span = btnExportGstr.querySelector('span');
+      if (span) span.textContent = lang.exportGstr1;
+    }
+
+    const btnAddOp = document.getElementById('btn-open-add-op-modal');
+    if (btnAddOp) {
+      const span = btnAddOp.querySelector('span');
+      if (span) span.textContent = lang.paySalary;
+    }
+
+    const btnAddDoc = document.getElementById('btn-open-add-doc-modal');
+    if (btnAddDoc) {
+      const span = btnAddDoc.querySelector('span');
+      if (span) span.textContent = lang.uploadDocument;
+    }
+
+    const loginTitleEl = document.querySelector('.login-title');
+    if (loginTitleEl) loginTitleEl.textContent = lang.loginTitle;
+    const loginSubEl = document.querySelector('.login-subtitle');
+    if (loginSubEl) loginSubEl.textContent = lang.loginSub;
+  }
+
   // Toast Helper
   function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
@@ -379,18 +672,19 @@
       targetSection.classList.add('active');
     }
 
+    const lang = translations[appState.settings?.language || 'en'] || translations.en;
     const titleMap = {
-      dashboard: 'Dashboard',
-      cranes: 'Crane Fleet Management',
-      customers: 'Customer Directory',
-      invoices: 'GST Invoices & Tax Breakdown',
-      operators: 'Operator Payroll & Salaries',
-      payments: 'Payment Tracker',
-      documents: 'Document Vault & Compliance',
-      settings: 'Settings & Defaults'
+      dashboard: lang.navDashboard,
+      cranes: lang.craneTitle,
+      customers: lang.customerTitle,
+      invoices: lang.invoiceTitle,
+      operators: lang.operatorTitle,
+      payments: lang.paymentTitle,
+      documents: lang.documentTitle,
+      settings: lang.settingsTitle
     };
     const headerTitleEl = document.getElementById('page-title');
-    if (headerTitleEl) headerTitleEl.textContent = titleMap[viewName] || 'Dashboard';
+    if (headerTitleEl) headerTitleEl.textContent = titleMap[viewName] || lang.navDashboard;
 
     window.location.hash = viewName;
     renderAllViews();
@@ -398,6 +692,7 @@
 
   // RENDER ALL VIEWS
   function renderAllViews() {
+    applyLanguage(appState.settings?.language || 'en');
     renderDashboard();
     renderCranes();
     renderCustomers();
