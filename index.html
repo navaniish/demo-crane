@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crane Service Management — GST Billing & Fleet ERP Demo</title>
+  <meta name="description" content="Simple, clean, mobile-responsive web application for crane rental fleet, customer management, operator salaries, document vault, and GST invoice billing.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23F5B700'/><path d='M25 80h50M35 80V20l35 25-35 15' stroke='%230F172A' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- FULLSCREEN LOGIN PORTAL WITH CONSTRUCTION BACKGROUND -->
+  <div class="login-screen hidden" id="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-brand-icon">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 22h16"/>
+            <path d="M8 22V2l10 7-10 4"/>
+            <path d="M12 13v9"/>
+            <path d="M18 9v13"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="login-title">APEX CRANE SERVICES</h1>
+          <div class="login-subtitle">FLEET ERP & GST BILLING PORTAL</div>
+        </div>
+      </div>
+
+      <!-- Direct 1-Click Instant Demo Login -->
+      <button type="button" class="btn btn-instant-demo" id="btn-instant-demo-login">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span>⚡ DIRECT CLICK DEMO ACCESS</span>
+      </button>
+
+      <div class="login-divider">
+        <span>OR LOGIN WITH CREDENTIALS</span>
+      </div>
+
+      <form id="form-login">
+        <div class="form-group">
+          <label>Email Address / Mobile *</label>
+          <input type="text" id="login-email" class="input-control" value="admin@apexcrane.in" placeholder="admin@apexcrane.in" required>
+        </div>
+        <div class="form-group">
+          <label>Password *</label>
+          <input type="password" id="login-password" class="input-control" value="12345678" placeholder="••••••••" required>
+        </div>
+        <div class="login-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="login-remember" checked>
+            <span>Remember Session</span>
+          </label>
+          <button type="button" class="link-btn-text" id="btn-fill-demo-credentials">Auto-fill Demo</button>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-login">
+          <span>Sign In to Crane ERP</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <span>Protected by Industrial Fleet Auth • Apex Crane Logistics</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Wrapper -->
+  <div class="app-layout" id="app-layout">
+    
+    <!-- Desktop Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-header">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 22h16"/>
+            <path d="M8 22V2l10 7-10 4"/>
+            <path d="M12 13v9"/>
+            <path d="M18 9v13"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">CRANE SERVICE</span>
+          <span class="brand-subtitle">FLEET & GST BILLING</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#dashboard" class="nav-item active" data-view="dashboard">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#cranes" class="nav-item" data-view="cranes">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 17h4V5H10z"/><path d="M20 17h2v4h-2z"/><path d="M2 17h2v4H2z"/><path d="M4 17h16v2H4z"/><path d="M14 8l6-3-6-3"/></svg>
+          <span>Cranes</span>
+          <span class="badge" id="sidebar-crane-count">0</span>
+        </a>
+        <a href="#customers" class="nav-item" data-view="customers">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Customers</span>
+        </a>
+        <a href="#invoices" class="nav-item" data-view="invoices">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>GST Invoices</span>
+        </a>
+        <a href="#operators" class="nav-item" data-view="operators">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Operator Salaries</span>
+        </a>
+        <a href="#payments" class="nav-item" data-view="payments">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <span>Payments</span>
+        </a>
+        <a href="#documents" class="nav-item" data-view="documents">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+          <span>Document Vault</span>
+          <span class="badge badge-warning hidden" id="sidebar-doc-alert-count">!</span>
+        </a>
+        <a href="#settings" class="nav-item" data-view="settings">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="company-badge">
+          <span class="company-dot"></span>
+          <span class="company-name-text" id="sidebar-company-name">Apex Crane Services</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Mobile / Global Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Toggle Navigation">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="header-title-box">
+            <span class="greeting-sub">Good Morning</span>
+            <h1 class="header-page-title" id="page-title">Dashboard</h1>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="header-date">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="current-date-display">19 Sep 2026</span>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline text-danger" id="btn-header-logout" title="Logout Session" style="gap: 0.35rem; padding: 0.4rem 0.65rem;">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <div class="content-body">
+
+        <!-- 1. DASHBOARD VIEW -->
+        <section class="view-section active" id="view-dashboard">
+          
+          <!-- Summary Cards Grid -->
+          <div class="metrics-grid">
+            <div class="card metric-card">
+              <div class="metric-icon navy">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 17h4V5H10z"/><path d="M20 17h2v4h-2z"/><path d="M2 17h2v4H2z"/><path d="M4 17h16v2H4z"/><path d="M14 8l6-3-6-3"/></svg>
+              </div>
+              <div class="metric-info">
+                <span class="metric-label">Total Cranes</span>
+                <span class="metric-value" id="dash-total-cranes">12</span>
+              </div>
+            </div>
+
+            <div class="card metric-card">
+              <div class="metric-icon green">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div class="metric-info">
+                <span class="metric-label">Active Cranes</span>
+                <span class="metric-value" id="dash-active-cranes">10</span>
+              </div>
+            </div>
+
+            <div class="card metric-card">
+              <div class="metric-icon yellow">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div class="metric-info">
+                <span class="metric-label">This Month Invoices</span>
+                <span class="metric-value" id="dash-month-invoices">₹2,45,000</span>
+              </div>
+            </div>
+
+            <div class="card metric-card">
+              <div class="metric-icon red">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div class="metric-info">
+                <span class="metric-label">Pending Payments</span>
+                <span class="metric-value" id="dash-pending-payments">₹68,000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Invoices List -->
+          <div class="card table-card">
+            <div class="card-header">
+              <h3>Recent Invoices</h3>
+              <a href="#invoices" class="link-btn" id="link-all-invoices">
+                <span>View All</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th class="text-right">Amount</th>
+                    <th>Status</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-recent-invoices-list">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- 2. CRANES MODULE -->
+        <section class="view-section" id="view-cranes">
+          <div class="view-header">
+            <div>
+              <h2>Crane Fleet Management</h2>
+              <p class="text-muted">Manage equipment, registration, capacity, and active availability.</p>
+            </div>
+            <button class="btn btn-primary" id="btn-open-add-crane-modal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>+ Add Crane</span>
+            </button>
+          </div>
+
+          <!-- Filters -->
+          <div class="filter-bar card">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="crane-search-input" placeholder="Search crane ID, reg number, model...">
+            </div>
+            <div class="filter-options">
+              <select id="crane-status-filter" class="select-control">
+                <option value="ALL">All Statuses</option>
+                <option value="Available">Available</option>
+                <option value="Working">Working</option>
+                <option value="Maintenance">Maintenance</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Crane Fleet Grid -->
+          <div class="crane-grid" id="cranes-grid">
+            <!-- Dynamically populated crane cards -->
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state hidden" id="cranes-empty-state">
+            <div class="empty-icon">🏗️</div>
+            <h3>No cranes added yet.</h3>
+            <p>Add your first crane fleet item to start assigning services and generating GST bills.</p>
+            <button class="btn btn-primary" id="empty-add-crane-btn">+ Add Your First Crane</button>
+          </div>
+        </section>
+
+        <!-- 3. CUSTOMERS MODULE -->
+        <section class="view-section" id="view-customers">
+          <div class="view-header">
+            <div>
+              <h2>Customer Directory</h2>
+              <p class="text-muted">Store billing addresses, GSTIN numbers, and contact details.</p>
+            </div>
+            <button class="btn btn-primary" id="btn-open-add-customer-modal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>+ Add Customer</span>
+            </button>
+          </div>
+
+          <!-- Search -->
+          <div class="filter-bar card">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="customer-search-input" placeholder="Search customer, company name or GSTIN...">
+            </div>
+          </div>
+
+          <!-- Customer List Table / Cards -->
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Customer Name</th>
+                    <th>Company</th>
+                    <th>Phone</th>
+                    <th>GSTIN</th>
+                    <th>City / State</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="customers-table-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state hidden" id="customers-empty-state">
+            <div class="empty-icon">👥</div>
+            <h3>No customers added yet.</h3>
+            <p>Add customer information to create instant GST invoices for crane rentals.</p>
+            <button class="btn btn-primary" id="empty-add-customer-btn">+ Add Customer</button>
+          </div>
+        </section>
+
+        <!-- 4. INVOICES MODULE & GST TAX REPORTS -->
+        <section class="view-section" id="view-invoices">
+          <div class="view-header">
+            <div>
+              <h2>GST Invoices & Tax Breakdown</h2>
+              <p class="text-muted">Generate, view, print, and export GSTR-1 compliant tax breakdown reports (SAC Code 997314).</p>
+            </div>
+            <div style="display:flex; gap:0.5rem;">
+              <button class="btn btn-outline" id="btn-export-gst-report">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Export GSTR-1 Report</span>
+              </button>
+              <button class="btn btn-primary" id="btn-open-create-invoice-modal">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>+ Create Invoice</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- GST Tax Summary Cards Banner -->
+          <div class="gst-summary-grid">
+            <div class="card gst-stat-card">
+              <div class="gst-stat-label">Total Taxable Turnover</div>
+              <div class="gst-stat-value" id="gst-taxable-total">₹0</div>
+              <div class="gst-stat-sub">SAC Code 997314 (Crane Services)</div>
+            </div>
+            <div class="card gst-stat-card">
+              <div class="gst-stat-label">CGST (9%) Output Collected</div>
+              <div class="gst-stat-value text-success" id="gst-cgst-total">₹0</div>
+              <div class="gst-stat-sub">Intra-state Sales</div>
+            </div>
+            <div class="card gst-stat-card">
+              <div class="gst-stat-label">SGST (9%) Output Collected</div>
+              <div class="gst-stat-value text-success" id="gst-sgst-total">₹0</div>
+              <div class="gst-stat-sub">State Tax Liability</div>
+            </div>
+            <div class="card gst-stat-card">
+              <div class="gst-stat-label">IGST (18%) Output Collected</div>
+              <div class="gst-stat-value text-warning" id="gst-igst-total">₹0</div>
+              <div class="gst-stat-sub">Inter-state Sales</div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="filter-bar card">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="invoice-search-input" placeholder="Search invoice no, customer, crane...">
+            </div>
+            <div class="filter-options">
+              <select id="invoice-status-filter" class="select-control">
+                <option value="ALL">All Payments</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+                <option value="Partially Paid">Partially Paid</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Invoices Table -->
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Invoice No</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Crane</th>
+                    <th class="text-right">Taxable Amount</th>
+                    <th class="text-right">GST Collected</th>
+                    <th class="text-right">Grand Total</th>
+                    <th>Status</th>
+                    <th class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="invoices-table-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state hidden" id="invoices-empty-state">
+            <div class="empty-icon">📄</div>
+            <h3>No invoices created yet.</h3>
+            <p>Select a customer and crane to issue your first GST compliant bill.</p>
+            <button class="btn btn-primary" id="empty-create-invoice-btn">+ Create Invoice</button>
+          </div>
+        </section>
+
+        <!-- 5. OPERATOR SALARIES MODULE -->
+        <section class="view-section" id="view-operators">
+          <div class="view-header">
+            <div>
+              <h2>Operator Payroll & Salaries</h2>
+              <p class="text-muted">Manage crane operators, riggers, monthly base salaries, overtime shift allowances, and payout vouchers.</p>
+            </div>
+            <button class="btn btn-primary" id="btn-open-add-op-modal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>+ Add Operator / Salary</span>
+            </button>
+          </div>
+
+          <!-- Payroll Summary Cards -->
+          <div class="metrics-grid">
+            <div class="card metric-card">
+              <div class="metric-icon navy">👥</div>
+              <div class="metric-info">
+                <span class="metric-label">Total Operators & Riggers</span>
+                <span class="metric-value" id="op-total-count">0</span>
+              </div>
+            </div>
+            <div class="card metric-card">
+              <div class="metric-icon green">💰</div>
+              <div class="metric-info">
+                <span class="metric-label">Total Monthly Payroll</span>
+                <span class="metric-value" id="op-total-payroll">₹0</span>
+              </div>
+            </div>
+            <div class="card metric-card">
+              <div class="metric-icon yellow">⏳</div>
+              <div class="metric-info">
+                <span class="metric-label">Pending Salary Payouts</span>
+                <span class="metric-value" id="op-pending-payroll">₹0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search & Filter -->
+          <div class="filter-bar card">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="op-search-input" placeholder="Search operator name, role, phone...">
+            </div>
+          </div>
+
+          <!-- Operator Table -->
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Operator Name</th>
+                    <th>Role</th>
+                    <th>Assigned Crane</th>
+                    <th class="text-right">Base Salary</th>
+                    <th class="text-right">Overtime & Allowance</th>
+                    <th class="text-right">Total Payable</th>
+                    <th>Payout Status</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="operators-table-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state hidden" id="operators-empty-state">
+            <div class="empty-icon">👷</div>
+            <h3>No operators or salary records found.</h3>
+            <p>Add crane operators, riggers, and monthly salary payouts.</p>
+            <button class="btn btn-primary" id="empty-add-op-btn">+ Add Operator</button>
+          </div>
+        </section>
+
+        <!-- 6. PAYMENTS MODULE -->
+        <section class="view-section" id="view-payments">
+          <div class="view-header">
+            <div>
+              <h2>Payment Tracker</h2>
+              <p class="text-muted">Track paid, pending, and partially paid balances with payment dates.</p>
+            </div>
+          </div>
+
+          <!-- Status Tabs -->
+          <div class="tab-filters">
+            <button class="tab-btn active" data-pay-filter="ALL">All Payments</button>
+            <button class="tab-btn" data-pay-filter="Pending">Pending</button>
+            <button class="tab-btn" data-pay-filter="Paid">Paid</button>
+            <button class="tab-btn" data-pay-filter="Partially Paid">Partially Paid</button>
+          </div>
+
+          <div class="card table-card">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Invoice No</th>
+                    <th>Customer</th>
+                    <th class="text-right">Invoice Total</th>
+                    <th class="text-right">Paid Amount</th>
+                    <th class="text-right">Balance</th>
+                    <th>Status</th>
+                    <th>Payment Method</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="payments-table-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. DOCUMENT VAULT MODULE -->
+        <section class="view-section" id="view-documents">
+          <div class="view-header">
+            <div>
+              <h2>Document Vault & Compliance</h2>
+              <p class="text-muted">Store RC books, fitness certificates, commercial insurance policies, and lifting test reports.</p>
+            </div>
+            <button class="btn btn-primary" id="btn-open-add-doc-modal">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+              <span>+ Upload Document</span>
+            </button>
+          </div>
+
+          <!-- Expiry Alert Banner -->
+          <div class="doc-alert-banner card hidden" id="doc-alert-banner">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-info">
+              <strong id="doc-alert-title">Compliance Alert</strong>
+              <div id="doc-alert-message">You have certificates expiring soon or expired. Please review and upload renewed documents.</div>
+            </div>
+          </div>
+
+          <!-- Category Filters -->
+          <div class="tab-filters">
+            <button class="tab-btn active" data-doc-cat="ALL">All Documents</button>
+            <button class="tab-btn" data-doc-cat="RC Book">RC Books</button>
+            <button class="tab-btn" data-doc-cat="Insurance">Insurance</button>
+            <button class="tab-btn" data-doc-cat="Fitness">Fitness</button>
+            <button class="tab-btn" data-doc-cat="Lifting Test">Lifting Tests (Form 10)</button>
+            <button class="tab-btn" data-doc-cat="Operator License">Licenses</button>
+          </div>
+
+          <!-- Filter & Search -->
+          <div class="filter-bar card">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="doc-search-input" placeholder="Search document name, category, crane code...">
+            </div>
+            <div class="filter-options">
+              <select id="doc-crane-filter" class="select-control">
+                <option value="ALL">All Cranes</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Document Cards Grid -->
+          <div class="doc-grid" id="documents-grid">
+            <!-- Dynamically populated document cards -->
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state hidden" id="documents-empty-state">
+            <div class="empty-icon">📁</div>
+            <h3>No documents in vault yet.</h3>
+            <p>Upload vehicle RCs, insurance papers, and lifting stability certificates to keep your fleet 100% compliant.</p>
+            <button class="btn btn-primary" id="empty-add-doc-btn">+ Upload First Document</button>
+          </div>
+        </section>
+
+        <!-- 8. SETTINGS MODULE -->
+        <section class="view-section" id="view-settings">
+          <div class="view-header">
+            <div>
+              <h2>Settings & Company Profile</h2>
+              <p class="text-muted">Update invoice header settings, tax registration, and defaults.</p>
+            </div>
+            <button class="btn btn-outline" id="btn-reset-demo-data">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span>Reset Demo Data</span>
+            </button>
+          </div>
+
+          <div class="settings-grid">
+            <div class="card settings-card">
+              <h3>Company Information</h3>
+              <form id="company-settings-form">
+                <div class="form-group">
+                  <label>Company Name</label>
+                  <input type="text" id="set-comp-name" class="input-control" value="Apex Crane Services & Logistics">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="set-comp-phone" class="input-control" value="+91 98250 12345">
+                  </div>
+                  <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="set-comp-email" class="input-control" value="billing@apexcrane.in">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>GSTIN</label>
+                  <input type="text" id="set-comp-gstin" class="input-control" value="24AAAAA0000A1Z5">
+                </div>
+                <div class="form-group">
+                  <label>Company Billing Address</label>
+                  <textarea id="set-comp-address" class="input-control" rows="2">Plot 104, GIDC Phase II, Naroda Industrial Estate, Ahmedabad, Gujarat 382330</textarea>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>State</label>
+                    <input type="text" id="set-comp-state" class="input-control" value="Gujarat">
+                  </div>
+                  <div class="form-group">
+                    <label>State Code</label>
+                    <input type="text" id="set-comp-state-code" class="input-control" value="24">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Company Info</button>
+              </form>
+            </div>
+
+            <div class="card settings-card">
+              <h3>Invoice & Tax Defaults</h3>
+              <form id="invoice-settings-form">
+                <div class="form-group">
+                  <label>Invoice Number Prefix</label>
+                  <input type="text" id="set-inv-prefix" class="input-control" value="INV-2026-">
+                </div>
+                <div class="form-group">
+                  <label>Default GST Rate (%)</label>
+                  <select id="set-inv-gst" class="select-control">
+                    <option value="18" selected>18% (Standard GST)</option>
+                    <option value="12">12%</option>
+                    <option value="5">5%</option>
+                    <option value="0">0% (Exempt)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Invoice Terms & Conditions</label>
+                  <textarea id="set-inv-terms" class="input-control" rows="4">1. Payment due within 15 days of invoice date.
+2. Demurrage charges applicable after initial scheduled rental period.
+3. Subject to Ahmedabad jurisdiction.</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Invoice Defaults</button>
+              </form>
+
+              <hr class="divider">
+
+              <h3>User Profile</h3>
+              <div class="user-profile-preview">
+                <div class="user-avatar">CS</div>
+                <div>
+                  <strong>Crane Operator Admin</strong>
+                  <div class="text-muted">admin@apexcrane.in</div>
+                  <button class="btn btn-sm btn-outline text-danger" id="btn-user-logout" style="margin-top: 0.65rem;">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <span>Logout Session</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav">
+    <a href="#dashboard" class="mobile-nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="#cranes" class="mobile-nav-item" data-view="cranes">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 17h4V5H10z"/><path d="M20 17h2v4h-2z"/><path d="M2 17h2v4H2z"/><path d="M4 17h16v2H4z"/><path d="M14 8l6-3-6-3"/></svg>
+      <span>Cranes</span>
+    </a>
+    <a href="#invoices" class="mobile-nav-item" data-view="invoices">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Invoices</span>
+    </a>
+    <a href="#operators" class="mobile-nav-item" data-view="operators">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Operators</span>
+    </a>
+    <a href="#documents" class="mobile-nav-item" data-view="documents">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <span>Docs</span>
+    </a>
+    <a href="#more" class="mobile-nav-item" id="mobile-more-trigger">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+      <span>More</span>
+    </a>
+  </nav>
+
+  <!-- Mobile "More" Drawer -->
+  <div class="mobile-drawer-overlay" id="mobile-more-overlay">
+    <div class="mobile-drawer">
+      <div class="drawer-header">
+        <h3>Menu Options</h3>
+        <button class="icon-btn" id="close-mobile-drawer">✕</button>
+      </div>
+      <div class="drawer-content">
+        <a href="#customers" class="drawer-link" data-view="customers">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span>Customers</span>
+        </a>
+        <a href="#payments" class="drawer-link" data-view="payments">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <span>Payment Tracker</span>
+        </a>
+        <a href="#settings" class="drawer-link" data-view="settings">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings & Config</span>
+        </a>
+        <button type="button" class="drawer-link text-danger" id="btn-drawer-logout" style="border: none; text-align: left; width: 100%; cursor: pointer;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout Session</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL: ADD / EDIT OPERATOR -->
+  <div class="modal-backdrop hidden" id="modal-add-operator">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="op-modal-title">Add New Operator / Staff</h3>
+        <button class="modal-close" id="close-modal-add-op">✕</button>
+      </div>
+      <form id="form-add-operator">
+        <input type="hidden" id="op-form-id">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="op-name" class="input-control" placeholder="e.g. Ramesh Kumar" required>
+            </div>
+            <div class="form-group">
+              <label>Role / Position *</label>
+              <select id="op-role" class="select-control" required>
+                <option value="Senior Crane Operator">Senior Crane Operator</option>
+                <option value="Crawler Crane Specialist">Crawler Crane Specialist</option>
+                <option value="Hydraulic Operator">Hydraulic Operator</option>
+                <option value="Rigging Master">Rigging Master</option>
+                <option value="Crane Helper">Crane Helper</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="text" id="op-phone" class="input-control" placeholder="+91 98765 00000" required>
+            </div>
+            <div class="form-group">
+              <label>Assigned Crane</label>
+              <select id="op-crane-select" class="select-control">
+                <option value="">-- Fleet Floating / Unassigned --</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Monthly Base Salary (₹) *</label>
+              <input type="number" id="op-base-salary" class="input-control" placeholder="28000" step="500" required>
+            </div>
+            <div class="form-group">
+              <label>Overtime Shift Pay (₹)</label>
+              <input type="number" id="op-overtime" class="input-control" placeholder="3000" value="0">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Batta / Trip Allowance (₹)</label>
+              <input type="number" id="op-allowance" class="input-control" placeholder="1500" value="0">
+            </div>
+            <div class="form-group">
+              <label>Payment Status</label>
+              <select id="op-status" class="select-control">
+                <option value="Pending">Pending Payout</option>
+                <option value="Paid">Paid</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancel-op-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Operator Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL: ADD CRANE -->
+  <div class="modal-backdrop hidden" id="modal-add-crane">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="crane-modal-title">Add New Crane</h3>
+        <button class="modal-close" id="close-modal-add-crane">✕</button>
+      </div>
+      <form id="form-add-crane">
+        <input type="hidden" id="crane-form-id">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Crane ID / Code *</label>
+              <input type="text" id="crane-code" class="input-control" placeholder="e.g. CR-005" required>
+            </div>
+            <div class="form-group">
+              <label>Crane Type *</label>
+              <select id="crane-type" class="select-control" required>
+                <option value="Mobile Crane">Mobile Crane</option>
+                <option value="Hydraulic Crane">Hydraulic Crane</option>
+                <option value="Crawler Crane">Crawler Crane</option>
+                <option value="Tower Crane">Tower Crane</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Lifting Capacity *</label>
+              <input type="text" id="crane-capacity" class="input-control" placeholder="e.g. 25 Ton, 40 Ton" required>
+            </div>
+            <div class="form-group">
+              <label>Registration Number *</label>
+              <input type="text" id="crane-reg" class="input-control" placeholder="e.g. GJ-01-XX-1234" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Model Name</label>
+              <input type="text" id="crane-model" class="input-control" placeholder="e.g. ACE 250 / Kobelco">
+            </div>
+            <div class="form-group">
+              <label>Manufacturing Year</label>
+              <input type="number" id="crane-year" class="input-control" placeholder="2022" value="2023">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hourly Rate (₹)</label>
+              <input type="number" id="crane-hourly" class="input-control" placeholder="1800">
+            </div>
+            <div class="form-group">
+              <label>Daily Rate (₹)</label>
+              <input type="number" id="crane-daily" class="input-control" placeholder="15000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Current Status *</label>
+            <select id="crane-status" class="select-control" required>
+              <option value="Available">● Available</option>
+              <option value="Working">● Working</option>
+              <option value="Maintenance">● Maintenance</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancel-crane-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Crane</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL: ADD CUSTOMER -->
+  <div class="modal-backdrop hidden" id="modal-add-customer">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="customer-modal-title">Add New Customer</h3>
+        <button class="modal-close" id="close-modal-add-customer">✕</button>
+      </div>
+      <form id="form-add-customer">
+        <input type="hidden" id="cust-form-id">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Customer Name *</label>
+              <input type="text" id="cust-name" class="input-control" placeholder="e.g. Ramesh Shah" required>
+            </div>
+            <div class="form-group">
+              <label>Company Name *</label>
+              <input type="text" id="cust-company" class="input-control" placeholder="e.g. ABC Construction Pvt Ltd" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="text" id="cust-phone" class="input-control" placeholder="+91 98765 43210" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="cust-email" class="input-control" placeholder="contact@company.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Billing Address *</label>
+            <textarea id="cust-address" class="input-control" rows="2" placeholder="Site / Office Address..." required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>GSTIN Number</label>
+              <input type="text" id="cust-gstin" class="input-control" placeholder="24AAAAA0000A1Z5">
+            </div>
+            <div class="form-group">
+              <label>State *</label>
+              <input type="text" id="cust-state" class="input-control" value="Gujarat" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancel-cust-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL: CREATE / EDIT GST INVOICE -->
+  <div class="modal-backdrop hidden" id="modal-create-invoice">
+    <div class="modal-dialog modal-large">
+      <div class="modal-header">
+        <h3 id="invoice-modal-title">Create GST Tax Invoice</h3>
+        <button class="modal-close" id="close-modal-create-invoice">✕</button>
+      </div>
+      <form id="form-create-invoice">
+        <input type="hidden" id="inv-form-id">
+        <div class="modal-body">
+          
+          <div class="invoice-form-sections">
+
+            <!-- Section 1: Customer & Crane Selection -->
+            <div class="form-section-card">
+              <h4 class="section-badge">1. Customer & Crane Selection</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Select Customer *</label>
+                  <select id="inv-select-customer" class="select-control" required>
+                    <option value="">-- Choose Customer --</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Select Crane *</label>
+                  <select id="inv-select-crane" class="select-control" required>
+                    <option value="">-- Choose Crane --</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 2: Service Details -->
+            <div class="form-section-card">
+              <h4 class="section-badge">2. Service Details & HSN Code</h4>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Service Date *</label>
+                  <input type="date" id="inv-service-date" class="input-control" required>
+                </div>
+                <div class="form-group">
+                  <label>SAC / HSN Code</label>
+                  <input type="text" id="inv-sac-code" class="input-control" value="997314 (Crane Rental)" readonly>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>From Location</label>
+                  <input type="text" id="inv-from-loc" class="input-control" placeholder="e.g. Ahmedabad Depot">
+                </div>
+                <div class="form-group">
+                  <label>To Location / Site</label>
+                  <input type="text" id="inv-to-loc" class="input-control" placeholder="e.g. Sanand Industrial Park">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Service Summary / Description</label>
+                <input type="text" id="inv-service-desc" class="input-control" placeholder="e.g. 25T Mobile Crane rental service for structural steel erection">
+              </div>
+            </div>
+
+            <!-- Section 3: Line Items -->
+            <div class="form-section-card">
+              <div class="section-header-between">
+                <h4 class="section-badge">3. Billing Items</h4>
+                <button type="button" class="btn btn-sm btn-outline" id="btn-add-line-item">+ Add Item Line</button>
+              </div>
+
+              <div class="items-table-wrapper">
+                <table class="items-input-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 45%;">Description</th>
+                      <th style="width: 15%;">Qty / Days</th>
+                      <th style="width: 20%;">Rate (₹)</th>
+                      <th style="width: 20%;">Amount (₹)</th>
+                      <th style="width: 40px;"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="invoice-items-body">
+                    <!-- Dynamic line item rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Section 4: GST & Taxes -->
+            <div class="form-section-card">
+              <h4 class="section-badge">4. Tax & Summary</h4>
+              <div class="tax-config-row">
+                <div class="form-group">
+                  <label>GST Rate (%)</label>
+                  <select id="inv-gst-rate" class="select-control">
+                    <option value="18" selected>18% Standard (997314)</option>
+                    <option value="12">12%</option>
+                    <option value="5">5%</option>
+                    <option value="0">0% Exempt</option>
+                  </select>
+                </div>
+                <div class="form-group checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="inv-is-interstate">
+                    <span>Interstate Supply (Charge IGST 18% instead of CGST/SGST)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Calculation Preview -->
+              <div class="calculation-summary-box">
+                <div class="calc-row">
+                  <span>Subtotal:</span>
+                  <strong id="calc-subtotal">₹0</strong>
+                </div>
+                <div class="calc-row" id="row-cgst">
+                  <span>CGST (9%):</span>
+                  <span id="calc-cgst">₹0</span>
+                </div>
+                <div class="calc-row" id="row-sgst">
+                  <span>SGST (9%):</span>
+                  <span id="calc-sgst">₹0</span>
+                </div>
+                <div class="calc-row hidden" id="row-igst">
+                  <span>IGST (18%):</span>
+                  <span id="calc-igst">₹0</span>
+                </div>
+                <div class="calc-row total-row">
+                  <span>Grand Total:</span>
+                  <strong id="calc-grand-total">₹0</strong>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancel-inv-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-invoice">Generate Invoice & Preview</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL: UPLOAD / EDIT DOCUMENT -->
+  <div class="modal-backdrop hidden" id="modal-add-document">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="doc-modal-title">Upload Compliance Document</h3>
+        <button class="modal-close" id="close-modal-add-doc">✕</button>
+      </div>
+      <form id="form-add-document">
+        <input type="hidden" id="doc-form-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Document Name / Title *</label>
+            <input type="text" id="doc-title" class="input-control" placeholder="e.g. CR-001 RTO Registration Certificate (RC)" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Document Category *</label>
+              <select id="doc-category" class="select-control" required>
+                <option value="RC Book">RC Book (Vehicle Registration)</option>
+                <option value="Insurance">Commercial Insurance</option>
+                <option value="Fitness">Fitness Certificate</option>
+                <option value="Lifting Test">Lifting Stability Test (Form 10)</option>
+                <option value="Operator License">Driver / Operator License</option>
+                <option value="Contract">Work Contract / Agreement</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Associated Crane</label>
+              <select id="doc-crane-select" class="select-control">
+                <option value="">-- General / Unassigned --</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Expiration Date *</label>
+              <input type="date" id="doc-expiry-date" class="input-control" required>
+            </div>
+            <div class="form-group">
+              <label>File Size / Info</label>
+              <input type="text" id="doc-file-info" class="input-control" placeholder="e.g. 1.2 MB PDF" value="1.2 MB PDF">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Upload Document File *</label>
+            <div class="file-upload-box" id="file-drop-area">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="file-upload-text">Click to choose document file (PDF, JPG, PNG)</span>
+              <input type="file" id="doc-file-input" accept=".pdf,.png,.jpg,.jpeg" style="display:none;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Notes & Compliance Details</label>
+            <textarea id="doc-notes" class="input-control" rows="2" placeholder="e.g. Certified by RTO Gujarat, Renewal due annual..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancel-doc-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Document</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL: PREVIEW / DOWNLOAD DOCUMENT -->
+  <div class="modal-backdrop hidden" id="modal-view-document">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="view-doc-title">Document Vault Preview</h3>
+        <button class="modal-close" id="close-modal-view-doc">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="doc-preview-card card">
+          <div class="doc-preview-icon">📜</div>
+          <div class="doc-preview-meta">
+            <h3 id="v-doc-name">Registration Certificate</h3>
+            <div class="doc-tags">
+              <span class="category-badge" id="v-doc-cat">RC Book</span>
+              <span class="status-badge valid" id="v-doc-status">● Valid</span>
+            </div>
+            <div class="doc-detail-row">Associated Crane: <strong id="v-doc-crane">CR-001</strong></div>
+            <div class="doc-detail-row">Expiry Date: <strong id="v-doc-expiry">2028-05-20</strong></div>
+            <div class="doc-detail-row">File Info: <span id="v-doc-size">1.4 MB PDF</span></div>
+            <div class="doc-notes-box" id="v-doc-notes">Original RC Book issued by Gujarat RTO.</div>
+          </div>
+        </div>
+        <div class="doc-mock-file-preview">
+          <div class="mock-file-header">
+            <span>OFFICIAL COMPLIANCE DOCUMENT PREVIEW</span>
+            <span>SECURE VAULT ENCRYPTED</span>
+          </div>
+          <div class="mock-file-body">
+            <div class="mock-seal">VERIFIED COMPLIANCE</div>
+            <p>This document is verified and stored in the Crane Fleet ERP Vault.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="close-view-doc-btn">Close</button>
+        <button type="button" class="btn btn-primary" id="btn-download-doc-file">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Download Document</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL: RECORD PAYMENT -->
+  <div class="modal-backdrop hidden" id="modal-record-payment">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Record Payment</h3>
+        <button class="modal-close" id="close-modal-record-payment">✕</button>
+      </div>
+      <form id="form-record-payment">
+        <input type="hidden" id="pay-inv-id">
+        <div class="modal-body">
+          <div class="payment-inv-summary card">
+            <div>
+              <strong id="pay-summary-inv-no">INV-2026-001</strong>
+              <div class="text-muted" id="pay-summary-cust">ABC Construction</div>
+            </div>
+            <div class="text-right">
+              <div>Total: <strong id="pay-summary-total">₹40,120</strong></div>
+              <div class="text-danger" id="pay-summary-due">Due: ₹40,120</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Payment Date *</label>
+            <input type="date" id="pay-date" class="input-control" required>
+          </div>
+
+          <div class="form-group">
+            <label>Payment Amount Received (₹) *</label>
+            <input type="number" id="pay-amount" class="input-control" step="0.01" required>
+          </div>
+
+          <div class="form-group">
+            <label>Payment Method *</label>
+            <select id="pay-method" class="select-control" required>
+              <option value="UPI">UPI / GPay / PhonePe</option>
+              <option value="Bank Transfer">Bank Transfer (NEFT/RTGS/IMPS)</option>
+              <option value="Cheque">Cheque</option>
+              <option value="Cash">Cash</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="cancel-pay-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Payment Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL: INVOICE PRINT PREVIEW SHEET -->
+  <div class="modal-backdrop hidden" id="modal-invoice-preview">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-header no-print">
+        <h3>GST Tax Invoice Preview</h3>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="btn-print-invoice">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            <span>Print / Save PDF</span>
+          </button>
+          <button class="modal-close" id="close-modal-invoice-preview">✕</button>
+        </div>
+      </div>
+      <div class="modal-body print-wrapper">
+        
+        <!-- PRINTABLE TAX INVOICE SHEET -->
+        <div class="printable-invoice" id="printable-invoice-content">
+          
+          <!-- Company Branding Header -->
+          <div class="print-header">
+            <div class="print-brand-left">
+              <div class="print-logo-box">CRANE</div>
+              <div>
+                <h1 class="print-company-name" id="p-comp-name">APEX CRANE SERVICES</h1>
+                <div class="print-company-sub" id="p-comp-sub">HEAVY LIFTING & CRANE RENTAL SOLUTIONS</div>
+                <div class="print-comp-address" id="p-comp-address">Plot 104, GIDC Phase II, Naroda, Ahmedabad, Gujarat 382330</div>
+                <div class="print-comp-contact">
+                  Phone: <span id="p-comp-phone">+91 98250 12345</span> | Email: <span id="p-comp-email">billing@apexcrane.in</span>
+                </div>
+              </div>
+            </div>
+            <div class="print-tax-badge">
+              <h2>TAX INVOICE</h2>
+              <div class="print-gstin-tag">GSTIN: <strong id="p-comp-gstin">24AAAAA0000A1Z5</strong></div>
+            </div>
+          </div>
+
+          <hr class="print-divider">
+
+          <!-- Invoice & Customer Meta Grid -->
+          <div class="print-meta-grid">
+            <div class="print-meta-box">
+              <div class="print-box-title">BILL TO (CUSTOMER)</div>
+              <div class="print-box-content">
+                <strong id="p-cust-company">ABC Construction Pvt. Ltd.</strong>
+                <div id="p-cust-name">Attn: Rajesh Patel</div>
+                <div id="p-cust-address">Plot 42, GIDC Industrial Estate, Sanand, Gujarat</div>
+                <div>GSTIN: <strong id="p-cust-gstin">24AAACB1234C1Z9</strong></div>
+                <div>Phone: <span id="p-cust-phone">+91 98765 43210</span></div>
+              </div>
+            </div>
+
+            <div class="print-meta-box">
+              <div class="print-box-title">INVOICE DETAILS</div>
+              <table class="print-meta-table">
+                <tr>
+                  <td>Invoice No:</td>
+                  <td><strong id="p-inv-number">INV-2026-001</strong></td>
+                </tr>
+                <tr>
+                  <td>Invoice Date:</td>
+                  <td id="p-inv-date">19/09/2026</td>
+                </tr>
+                <tr>
+                  <td>SAC / HSN Code:</td>
+                  <td><strong>997314</strong></td>
+                </tr>
+                <tr>
+                  <td>Place of Supply:</td>
+                  <td id="p-inv-place">Gujarat (24)</td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="print-meta-box full-width">
+              <div class="print-box-title">CRANE & SERVICE LOCATION DETAILS</div>
+              <div class="print-crane-row">
+                <div>Crane ID & Type: <strong id="p-crane-info">CR-001 (Mobile Crane - 25 Ton)</strong></div>
+                <div>Reg No: <strong id="p-crane-reg">GJ-01-XX-1234</strong></div>
+                <div>Route: <span id="p-crane-route">Ahmedabad Depot → Sanand Site B</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <table class="print-items-table">
+            <thead>
+              <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 45%;">Service Description</th>
+                <th style="width: 15%;">SAC Code</th>
+                <th style="width: 10%; text-align: center;">Qty</th>
+                <th style="width: 12%; text-align: right;">Rate (₹)</th>
+                <th style="width: 13%; text-align: right;">Amount (₹)</th>
+              </tr>
+            </thead>
+            <tbody id="p-items-list">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+
+          <!-- Tax Calculation & Totals -->
+          <div class="print-totals-wrapper">
+            <div class="print-words-box">
+              <div class="print-box-title">AMOUNT IN WORDS</div>
+              <div class="amount-words-text" id="p-amount-words">Forty Thousand One Hundred Twenty Rupees Only</div>
+              
+              <div class="print-terms-box">
+                <div class="print-box-title">TERMS & CONDITIONS</div>
+                <div id="p-terms-text">
+                  1. Payment due within 15 days.<br>
+                  2. Demurrage charges applicable after scheduled period.<br>
+                  3. Subject to local jurisdiction.
+                </div>
+              </div>
+            </div>
+
+            <div class="print-totals-box">
+              <table class="print-totals-table">
+                <tr>
+                  <td>Taxable Value:</td>
+                  <td class="text-right" id="p-subtotal">₹34,000.00</td>
+                </tr>
+                <tr id="p-row-cgst">
+                  <td>CGST (9%):</td>
+                  <td class="text-right" id="p-cgst">₹3,060.00</td>
+                </tr>
+                <tr id="p-row-sgst">
+                  <td>SGST (9%):</td>
+                  <td class="text-right" id="p-sgst">₹3,060.00</td>
+                </tr>
+                <tr id="p-row-igst" class="hidden">
+                  <td>IGST (18%):</td>
+                  <td class="text-right" id="p-igst">₹0.00</td>
+                </tr>
+                <tr class="grand-total-row">
+                  <td>Grand Total:</td>
+                  <td class="text-right" id="p-grand-total">₹40,120.00</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- Signature Footer -->
+          <div class="print-footer">
+            <div class="print-thankyou">Thank you for your business!</div>
+            <div class="print-signature-box">
+              <div class="company-seal-title" id="p-sig-comp">For APEX CRANE SERVICES</div>
+              <div class="sig-space"></div>
+              <div class="sig-line">Authorized Signature</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
