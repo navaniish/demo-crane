@@ -218,7 +218,8 @@
       stateCode: '24',
       invoicePrefix: 'INV-2026-',
       defaultGst: '18',
-      terms: '1. Payment due within 15 days of invoice date.\n2. Demurrage charges applicable after initial rental period.\n3. Subject to Ahmedabad jurisdiction.'
+      terms: '1. Payment due within 15 days of invoice date.\n2. Demurrage charges applicable after initial rental period.\n3. Subject to Ahmedabad jurisdiction.',
+      language: 'en'
     },
     isLoggedIn: false
   };
@@ -852,21 +853,27 @@
         <div>
           <div class="doc-card-header">
             <div class="doc-type-icon">📜</div>
-            <div>
-              <div class="doc-card-title">${doc.title}</div>
+            <div class="doc-card-header-info">
+              <h4 class="doc-card-title">${doc.title}</h4>
               <span class="category-badge">${doc.category}</span>
             </div>
           </div>
           <div class="doc-card-meta">
-            <div>Assigned Crane: <strong>${craneTag}</strong></div>
+            <div class="doc-crane-row">
+              <span class="text-muted">Assigned Crane:</span>
+              <strong>${craneTag}</strong>
+            </div>
             <div class="doc-expiry-row">
-              <span>Expires: <strong>${doc.expiryDate}</strong></span>
+              <div class="expiry-date-box">
+                <span class="text-muted">Expires:</span>
+                <strong>${doc.expiryDate}</strong>
+              </div>
               <span class="status-badge ${statusClass}"><span class="status-dot"></span>${status}</span>
             </div>
           </div>
         </div>
-        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
-          <button class="btn btn-sm btn-primary btn-view-doc" data-id="${doc.id}" style="flex:1;">View Vault</button>
+        <div class="doc-card-actions">
+          <button class="btn btn-sm btn-primary btn-view-doc" data-id="${doc.id}">View Vault</button>
           <button class="btn btn-sm btn-outline btn-edit-doc" data-id="${doc.id}">Edit</button>
           <button class="btn btn-sm btn-outline text-danger btn-delete-doc" data-id="${doc.id}">✕</button>
         </div>
@@ -911,6 +918,8 @@
     if (setInvGst) setInvGst.value = set.defaultGst;
     const setInvTerms = document.getElementById('set-inv-terms');
     if (setInvTerms) setInvTerms.value = set.terms;
+    const setAppLang = document.getElementById('set-app-language');
+    if (setAppLang) setAppLang.value = set.language || 'en';
   }
 
   // MODALS & ACTIONS HANDLERS
@@ -1705,6 +1714,23 @@
       appState.settings.terms = document.getElementById('set-inv-terms').value.trim();
       saveState();
       showToast('Invoice Defaults Saved!');
+    });
+
+    document.getElementById('language-settings-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      appState.settings = appState.settings || {};
+      const chosenLang = document.getElementById('set-app-language')?.value || 'en';
+      appState.settings.language = chosenLang;
+      saveState();
+
+      const langNames = {
+        'en': 'English',
+        'gu': 'ગુજરાતી (Gujarati)',
+        'hi': 'हिन्दी (Hindi)',
+        'mr': 'मराठी (Marathi)'
+      };
+
+      showToast(`Language preference set to ${langNames[chosenLang] || chosenLang}`);
     });
 
     // Auth & Session Listeners
