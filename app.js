@@ -1319,8 +1319,10 @@
     const form = document.getElementById('form-add-crane');
     form.reset();
 
+    const submitBtnSpan = document.querySelector('#btn-save-crane span');
     if (craneObj) {
       document.getElementById('crane-modal-title').textContent = 'Edit Crane';
+      if (submitBtnSpan) submitBtnSpan.textContent = 'Verify & Save Changes';
       document.getElementById('crane-form-id').value = craneObj.id;
       document.getElementById('crane-code').value = craneObj.code;
       document.getElementById('crane-type').value = craneObj.type;
@@ -1333,6 +1335,7 @@
       document.getElementById('crane-status').value = craneObj.status;
     } else {
       document.getElementById('crane-modal-title').textContent = 'Add New Crane';
+      if (submitBtnSpan) submitBtnSpan.textContent = 'Verify & Add Crane';
       document.getElementById('crane-form-id').value = '';
       const nextCode = 'CR-00' + (appState.cranes.length + 1);
       document.getElementById('crane-code').value = nextCode;

@@ -1116,9 +1116,31 @@ textarea.input-control {
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 1.35rem 1.5rem;
   overflow-y: auto;
+  max-height: calc(85vh - 120px);
   flex: 1;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Scrollbar for Modal Forms */
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--color-yellow);
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-yellow-hover);
 }
 
 .modal-footer {
