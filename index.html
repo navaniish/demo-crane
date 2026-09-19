@@ -621,6 +621,7 @@
           </div>
 
           <div class="settings-grid">
+            <!-- Card 1: Company Information -->
             <div class="card settings-card">
               <h3>Company Information</h3>
               <form id="company-settings-form">
@@ -660,6 +661,7 @@
               </form>
             </div>
 
+            <!-- Card 2: Invoice & Tax Defaults -->
             <div class="card settings-card">
               <h3>Invoice & Tax Defaults</h3>
               <form id="invoice-settings-form">
@@ -684,9 +686,10 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Save Invoice Defaults</button>
               </form>
+            </div>
 
-              <hr class="divider">
-
+            <!-- Card 3: Language & Regional Preferences -->
+            <div class="card settings-card">
               <h3>Language & Regional Preferences</h3>
               <form id="language-settings-form">
                 <div class="form-group">
@@ -702,17 +705,18 @@
                   <label>Currency & Regional Format</label>
                   <input type="text" class="input-control" value="INR (₹) — Indian Standard (GST SAC 997314)" readonly style="background-color: var(--color-bg); opacity: 0.85;">
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-bottom: 1rem;">Save Language Preference</button>
+                <button type="submit" class="btn btn-primary">Save Language Preference</button>
               </form>
+            </div>
 
-              <hr class="divider">
-
-              <h3>User Profile</h3>
+            <!-- Card 4: User Profile & Session -->
+            <div class="card settings-card">
+              <h3>User Profile & Session</h3>
               <div class="user-profile-preview">
                 <div class="user-avatar">CS</div>
                 <div>
                   <strong>Crane Operator Admin</strong>
-                  <div class="text-muted">admin@apexcrane.in</div>
+                  <div class="text-muted" style="font-size:0.85rem;">admin@apexcrane.in</div>
                   <button class="btn btn-sm btn-outline text-danger" id="btn-user-logout" style="margin-top: 0.65rem;">
                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     <span>Logout Session</span>
